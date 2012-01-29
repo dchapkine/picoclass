@@ -1,0 +1,84 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+<link rel="stylesheet" title="Sunburst" href="http://yandex.st/highlightjs/6.1/styles/github.css"/>
+<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js">
+{
+    overrideConsole: true,
+    startOpened: true,
+    enableTrace: true
+}
+</script>
+<script src="http://yandex.st/highlightjs/6.1/highlight.min.js"></script>
+<script src="../src/picoclass.js"></script>
+<script src="log.js"></script>
+  
+<script id="example" type='text/javascript'>
+
+
+	var A = $class({
+		
+		construct: function()
+		{
+			console.log("A.construct(", arguments,")");
+		},
+		
+		foo: function(arg1, arg2)
+		{
+			console.log("A.foo(", arguments,")");
+		}
+	});
+	
+	var B = $class({
+		extends: A,
+		
+		construct: function()
+		{
+			this.super.construct();
+			console.log("B.construct(", arguments,")");
+		},
+		
+		foo: function(arg1, arg2)
+		{
+			this.super.foo(arg1, arg2); // equivalent à A.prototype.foo.apply(this, arguments);
+			console.log("B.foo(", arguments,")");
+		}
+	});
+	
+	var C = $class({
+		extends: B,
+		
+		construct: function()
+		{
+			this.super.construct();
+			console.log("C.construct(", arguments,")");
+		},
+		
+		foo: function(arg1, arg2)
+		{
+			this.super.foo(arg1, arg2); // equivalent à B.prototype.foo.apply(this, arguments);
+			console.log("C.foo(", arguments,")");
+		}
+	});
+
+	// Usage
+	var tmp = new C();
+	tmp.foo(1, 2);
+	
+
+
+</script>
+</head>
+<body>
+<h1>Overriding instance methods and constructors</h1>
+<pre class="javascript"><code id="code"></code></pre>
+<script>
+  hljs.tabReplace = '    ';
+  hljs.initHighlightingOnLoad();
+  document.getElementById("code").innerText = document.getElementById("example").innerText;
+</script>
+</body>
+</html>
+
+

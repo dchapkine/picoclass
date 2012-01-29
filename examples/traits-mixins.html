@@ -1,0 +1,56 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+<link rel="stylesheet" title="Sunburst" href="http://yandex.st/highlightjs/6.1/styles/github.css"/>
+<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js">
+{
+    overrideConsole: true,
+    startOpened: true,
+    enableTrace: true
+}
+</script>
+<script src="http://yandex.st/highlightjs/6.1/highlight.min.js"></script>
+<script src="../src/picoclass.js"></script>
+<script src="log.js"></script>
+  
+<script id="example" type='text/javascript'>
+
+	Hello = $class({
+		sayHello: function() {
+			console.log('Hello');
+		}
+	});
+	 
+	World = $class({
+		sayWorld: function() {
+			console.log(' World');
+		}
+	});
+	 
+	MyHelloWorld = $class({
+		use: [Hello, World],
+		sayExclamationMark: function() {
+			console.log('!');
+		}
+	});
+	 
+	// Usage: On peut voir que MyHelloWorld a bien herité des methodes de Hello et de World à la fois !
+	var o = new MyHelloWorld();
+	o.sayHello();   // Hello
+	o.sayWorld();   //  World
+	o.sayExclamationMark(); // !
+
+
+</script>
+</head>
+<body>
+<h1>Traits/Mixin example</h1>
+<pre class="javascript"><code id="code"></code></pre>
+<script>
+  hljs.tabReplace = '    ';
+  hljs.initHighlightingOnLoad();
+  document.getElementById("code").innerText = document.getElementById("example").innerText;
+</script>
+</body>
+</html>

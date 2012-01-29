@@ -1,0 +1,75 @@
+<!doctype html>
+<html>
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+<link rel="stylesheet" title="Sunburst" href="http://yandex.st/highlightjs/6.1/styles/github.css"/>
+<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js">
+{
+    overrideConsole: true,
+    startOpened: true,
+    enableTrace: true
+}
+</script>
+<script src="http://yandex.st/highlightjs/6.1/highlight.min.js"></script>
+<script src="../src/picoclass.js"></script>
+<script src="log.js"></script>
+  
+<script id="example" type='text/javascript'>
+
+
+	var A = $class({
+        static: {
+			foo: function(arg1, arg2, arg3)
+			{
+				console.log("A.foo(", arguments,")");
+			}
+		}
+    });
+    
+    var B = $class({
+        extends: A,
+		
+        static: {
+			foo: function(arg1, arg2)
+			{
+				this.super.foo(arg1, arg2, 100);
+				console.log("B.foo(", arguments,")");
+			}
+		}
+    });
+    
+    var C = $class({
+        extends: B,
+		
+        static: {
+			foo: function(arg1)
+			{
+				this.super.foo(arg1, 75);
+				console.log("C.foo(", arguments,")");
+			}
+		}
+    });
+
+    // Usage
+    C.foo(25);
+    
+
+
+
+	
+
+
+</script>
+</head>
+<body>
+<h1>Overriding static methods</h1>
+<pre class="javascript"><code id="code"></code></pre>
+<script>
+  hljs.tabReplace = '    ';
+  hljs.initHighlightingOnLoad();
+  document.getElementById("code").innerText = document.getElementById("example").innerText;
+</script>
+</body>
+</html>
+
+
