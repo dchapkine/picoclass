@@ -11,10 +11,13 @@ Its unique goal is to simplify the way we write the equivalent of 'classical obj
 
 Picoclass.js is also very small (and WILL stay small): 300 loc. 100 of them are comments ;-)
 
-Take a look at "examples" folder to learn how to use it.
+Take a look at [demo page](http://dchapkine.github.com/picoclass/) to learn how to use it.
 
 
 ### Changelog
+
++ Version 0.1.1alpha - 2012.03.12
+	+ examples are now hosted on gh-pages here: http://dchapkine.github.com/picoclass
 
 + Version 0.1.0alpha - 2012.01.29
 	+ source moved to github

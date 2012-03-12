@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<title>PicoClass</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<meta name="description" content="">
+	<meta name="author" content="">
+	<meta http-equiv='Content-Type' content='text/html; charset=utf-8'/>
+	<link rel="stylesheet" title="Sunburst" href="http://twitter.github.com/bootstrap/assets/css/bootstrap.css"/>
+	<link rel="stylesheet" title="Sunburst" href="http://yandex.st/highlightjs/6.1/styles/sunburst.css"/>
+	<style type="text/css">
+	body {
+		padding-top: 60px;
+		padding-bottom: 40px;
+	}
+	
+	h1
+	{
+		padding-bottom: 20px;
+	}
+	
+	.sidebar-nav {
+		padding: 9px 0;
+	}
+	
+	#FirebugUI {
+		border: 1px solid rgba(0, 0, 0, 0.05) !important;
+		z-index: 2147483647;
+		width: 450px !important;
+		left: 20px !important;
+		top: 300px !important;
+		height: 480px !important;
+		visibility: visible;
+		position: fixed !important;
+	}
+	</style>
+</head>
+
+<body onload="loaded()">
+
+	<div class="navbar navbar-fixed-top">
+		<div class="navbar-inner">
+			<div class="container-fluid">
+				<a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</a>
+				<div class="nav-collapse">
+					<ul class="nav">
+						<li><a href="https://github.com/dchapkine/picoclass">Source</a></li>
+						<li class="active"><a href="http://dchapkine.github.com/picoclass/examples">Examples</a></li>
+						<li><a href="https://github.com/dchapkine/picoclass/zipball/master">Download</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<div class="container-fluid">
+	  <div class="row-fluid">
+		<div class="span4">
+		  <div class="well sidebar-nav">
+			<ul class="nav nav-list">
+			  <li class="nav-header">Examples</li>
+			  <li><a href="#" onclick="load.call(this, 'create-simple-class')">Create simple class</a></li>
+			  <li><a href="#" onclick="load.call(this, 'override-instance-methods-and-constructors')">Override methods & constructors</a></li>
+			  <li><a href="#" onclick="load.call(this, 'override-static-methods')">Override static methods</a></li>
+			  <li><a href="#" onclick="load.call(this, 'single-inheritance')">Single inheritance</a></li>
+			  <li><a href="#" onclick="load.call(this, 'single-static-inheritance-1')">Single static inheritance 1/2</a></li>
+			  <li><a href="#" onclick="load.call(this, 'single-static-inheritance-2')">Single static inheritance 2/2</a></li>
+			  <li><a href="#" onclick="load.call(this, 'traits-mixins')">Traits/Mixins</a></li>
+			</ul>
+		  </div>
+		</div>
+		<div class="span8">
+			<h1 id="title"></h1>
+			<pre class="javascript"><code id="code">Wait a second while firebug lite and highlightjs are loading...</code></pre>
+		</div>
+		<div class="span8" id="fb">
+			<script type="text/javascript" src="https://getfirebug.com/firebug-lite.js">
+			{
+				overrideConsole: true,
+				startOpened: true,
+				enableTrace: true
+			}
+			</script>
+		</div>
+	  </div>
+
+	  <hr>
+
+	  <footer>
+		<p></p>
+	  </footer>
+
+	</div>
+
+
+
+
+	
+	
+	
+	
+	
+	
+	
+	
+
+	<script id="create-simple-class" type='text'>
+
+	// Class A
+	A = $class({
+		// Constructor
+		construct: function(param1)
+		{
+			this.attribut1 = param1;
+		},
+		 
+		// Instance method
+		foo: function()
+		{
+			console.log(this.attribut1);
+		}
+	});
+	 
+	// Usage
+	var tmp = new A(42);
+	tmp.foo();
+
+	</script>
+
+	<script id="override-instance-methods-and-constructors" type='text'>
+
+	var A = $class({
+		
+		construct: function()
+		{
+			console.log("A.construct(", arguments,")");
+		},
+		
+		foo: function(arg1, arg2)
+		{
+			console.log("A.foo(", arguments,")");
+		}
+	});
+
+	var B = $class({
+		extends: A,
+		
+		construct: function()
+		{
+			this.super.construct();
+			console.log("B.construct(", arguments,")");
+		},
+		
+		foo: function(arg1, arg2)
+		{
+			this.super.foo(arg1, arg2); // equivalent to A.prototype.foo.apply(this, arguments);
+			console.log("B.foo(", arguments,")");
+		}
+	});
+
+	var C = $class({
+		extends: B,
+		
+		construct: function()
+		{
+			this.super.construct();
+			console.log("C.construct(", arguments,")");
+		},
+		
+		foo: function(arg1, arg2)
+		{
+			this.super.foo(arg1, arg2); // equivalent to B.prototype.foo.apply(this, arguments);
+			console.log("C.foo(", arguments,")");
+		}
+	});
+
+	// Usage
+	var tmp = new C();
+	tmp.foo(1, 2);
+
+
+	</script>
+
+	<script id="override-static-methods" type='text'>
+
+	var A = $class({
+		static: {
+			foo: function(arg1, arg2, arg3)
+			{
+				console.log("A.foo(", arguments,")");
+			}
+		}
+	});
+
+	var B = $class({
+		extends: A,
+
+		static: {
+			foo: function(arg1, arg2)
+			{
+				this.super.foo(arg1, arg2, 100);
+				console.log("B.foo(", arguments,")");
+			}
+		}
+	});
+
+	var C = $class({
+		extends: B,
+
+		static: {
+			foo: function(arg1)
+			{
+				this.super.foo(arg1, 75);
+				console.log("C.foo(", arguments,")");
+			}
+		}
+	});
+
+	// Usage
+	C.foo(25);
+
+
+
+
+	</script>
+
+	<script id="single-inheritance" type='text'>
+
+	// class A
+	A = function()
+	{
+		console.log("A constructor");
+	};
+
+	A.prototype.foo = function()
+	{};
+
+	// class B
+	B = picoclass({
+		extends: A,
+		 
+		construct: function()
+		{
+			this.super(); // Calls A's constructor in the scope of an instance of B
+			console.log("B constructor");
+		}
+	});
+	 
+	// Usage
+	var tmp = new B();
+	tmp.foo();
+		
+	</script>
+
+	<script id="single-static-inheritance-1" type='text'>
+
+	// Class A
+	A = $class({
+		 
+		static: {
+			instances: 0
+		},
+		 
+		construct: function()
+		{
+			// Dont forget that in Js, 'this.constructor', when called from a 'class' instance
+			// reffers to the constructor of this 'class'
+			// ...and picoclass uses the constructor function to store statics ( = 'class members' )
+			this.constructor.instances++;
+		}
+	});
+	 
+	// Class B
+	// As B's constructor is not defined, B will automaticly "inherit" the constructor of A
+	B = $class({
+		extends: A
+	});
+	 
+	 
+	// Usage
+	new A();
+	new A();
+	new A();
+	new A();
+	new A();
+	new B();
+	new B();
+	console.log(A.instances); // 5
+	console.log(B.instances); // 2
+
+	</script>
+
+	<script id="single-static-inheritance-2" type='text'>
+
+	Singleton = $class({
+		static: {
+			//
+			// When used inside static block, this points to the constructor function, not to the instance of the "class".
+			//
+			// Thats why "new this" will create an instance of curent "class"
+			//
+			// Note that the static block is inherited by child "classes", and "this" reffers to the child class,
+			// NOT the parent.
+			//
+			_instance: null,
+			getInstance: function()
+			{
+				if (this._instance == null)
+					this._instance = new this;
+				return this._instance;
+			}
+		}
+	});
+	 
+	God = $class({
+		extends: Singleton
+	});
+	 
+	Sun = $class({
+		extends: Singleton
+	});
+	 
+	Einstein = $class({
+		extends: Singleton
+	});
+	 
+	 
+	// Usage
+	// We check types of our instances
+	console.log(God.getInstance() instanceof God);    // true
+	console.log(Sun.getInstance() instanceof Sun);    // true
+	console.log(Einstein.getInstance() instanceof Einstein);    // true
+	 
+	// Note that each instance is an instance of Singleton, because it inherits from Singleton
+	console.log(God.getInstance() instanceof Singleton);    // true
+	console.log(Sun.getInstance() instanceof Singleton);    // true
+	console.log(Einstein.getInstance() instanceof Singleton);    // true
+
+
+	</script>
+
+	<script id="traits-mixins" type='text'>
+
+	Hello = $class({
+		sayHello: function() {
+			console.log('Hello');
+		}
+	});
+	 
+	World = $class({
+		sayWorld: function() {
+			console.log(' World');
+		}
+	});
+	 
+	MyHelloWorld = $class({
+		use: [Hello, World],
+		sayExclamationMark: function() {
+			console.log('!');
+		}
+	});
+	 
+	// Usage: We can see that MyHelloWorld has inherited all the methods of Hello and World !
+	var o = new MyHelloWorld();
+	o.sayHello();   // Hello
+	o.sayWorld();   //  World
+	o.sayExclamationMark(); // !
+
+	</script>
+
+
+	<!--
+		Libs
+		-->
+	<script src="http://yandex.st/highlightjs/6.1/highlight.min.js"></script>
+	<script src="src/picoclass.js"></script>
+	<script>
+
+		// Loads and runs an example
+		function load(name)
+		{
+			title = name.substr(0, 1).toUpperCase() + name.split('-').join(' ').substr(1);
+			
+			if (console['clear'] != undefined)
+				console.clear();
+			document.getElementById('title').innerHTML = title;
+			document.getElementById("code").innerHTML = document.getElementById(name).textContent;
+			eval(document.getElementById(name).textContent);
+			hljs.highlightBlock(document.getElementById("code"), '  ', false);
+		}
+		
+		function loaded()
+		{
+			var f = document.getElementById("FirebugUI");
+			f.style.position = "static";
+			
+			load('create-simple-class');
+		}
+	  
+	</script>
+
+</body>
+</html>
+
+
+
